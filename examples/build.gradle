@@ -1,32 +1,33 @@
 project.ext.sdkVersion = 25
 project.ext.buildTools = '25.0.2'
 
+buildscript {
+    repositories {
+        mavenLocal()
+        jcenter()
+        maven { url 'https://jitpack.io' }
+    }
+    def currentVersion = "2.3.0"
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.0'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
+        classpath 'com.github.JakeWharton:sdk-manager-plugin:0ce4cdf08009d79223850a59959d9d6e774d0f77'
+        classpath 'com.novoda:gradle-android-command-plugin:1.5.0'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        classpath "io.realm:realm-gradle-plugin:${currentVersion}"
+
+        // Required by okBuckExample
+        classpath 'com.uber:okbuck:0.17.0'
+    }
+}
+
 // Don't cache SNAPSHOT (changing) dependencies.
 configurations.all {
     resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 
 allprojects {
-    def currentVersion = file("${rootDir}/../version.txt").text.trim()
-
-    buildscript {
-        repositories {
-            mavenLocal()
-            jcenter()
-            maven { url 'https://jitpack.io' }
-        }
-        dependencies {
-            classpath 'com.android.tools.build:gradle:2.2.0'
-            classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
-            classpath 'com.github.JakeWharton:sdk-manager-plugin:0ce4cdf08009d79223850a59959d9d6e774d0f77'
-            classpath 'com.novoda:gradle-android-command-plugin:1.5.0'
-            classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
-            classpath "io.realm:realm-gradle-plugin:${currentVersion}"
-
-            // Required by okBuckExample
-            classpath 'com.uber:okbuck:0.17.0'
-        }
-    }
+    def currentVersion = "2.3.0"
 
     group = 'io.realm'
     version = currentVersion
@@ -36,3 +37,14 @@ allprojects {
         jcenter()
     }
 }
+
+repositories {
+    jcenter()
+}
+
+apply plugin: 'com.uber.okbuck'
+
+okbuck {
+    buckProjects = subprojects.findAll { it.name == "okBuckExample" }
+}
+

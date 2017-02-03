@@ -126,7 +126,7 @@ task assembleGradlePlugin(type:GradleBuild) {
 task installGradlePlugin(type:GradleBuild) {
     description = 'Install the Realm Gradle plugin into mavenLocal()'
     group = 'Install'
-    dependsOn installRealm
+    // dependsOn installRealm
     dependsOn installTransformer
     buildFile = file('gradle-plugin/build.gradle')
     tasks = ['publishToMavenLocal']
